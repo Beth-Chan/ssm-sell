@@ -120,7 +120,9 @@
 
 #### 买家端**DAO**层设计与开发
 
-pom.xml里添加依赖
+###### 第一个表product_category的操作
+
+第一步.pom.xml里添加依赖
 
     <dependency>
         <groupId>mysql</groupId>
@@ -133,7 +135,7 @@ pom.xml里添加依赖
     </dependency>
 
 
-修改application.properties为application.yml，树形结构更简洁：
+第二步.添加数据库相关配置，修改application.properties为application.yml，树形结构更简洁：
 
     spring:
       datasource:
@@ -147,48 +149,92 @@ pom.xml里添加依赖
 
 ##### 创建dataobject文件夹存放Entity实体对象
 
+第三步.创建数据库对象（其实就是表的映射）
 ProductCategory类：<br>
-数据库表名是product_category
-属性（此处省略setter和getter)：
+数据库表名是product_category<br>
 
-    Integer categoryId; 
-    private String categoryName;
-    private Integer categoryType
+    @Entity
+    @DynamicUpdate
+    @Data /* lombok getter, setter and toString() */
+    public class ProductCategory {
+    
+        /** 类目id. */
+        @Id /* 主键 */
+        @GeneratedValue /* 自增 */
+        private Integer categoryId;
+    
+        private String categoryName;
+    
+        private Integer categoryType;
+    
+        public ProductCategory() {
+        }
+    
+        public ProductCategory(String categoryName, Integer categoryType) {
+            this.categoryName = categoryName;
+            this.categoryType = categoryType;
+        }
+    }
 
 @Entity表示当前类是实体类；@Id表示当前属性是主键；@GeneratedValue表示自增
 
 ##### 创建repository文件夹存放DAO Bean
 
+第四步.写DAO层的代码（直接extends JpaRepository，连SQL语句都不用写）
+**ProductCategoryRepository** 
+
     // ProductCategory和Integer是对象和主键类型
     public interface ProductCategoryRepository extends JpaRepository<ProductCategory, Integer> {
     
+        // 通过category_type查商品列表
+        List<ProductCategory> findByCategoryTypeIn(List<Integer> categoryTypeList);
     }
 
 
 ##### 单元测试
 
+第五步.进行单元测试
+
     @RunWith(SpringRunner.class)
     @SpringBootTest
     public class ProductCategoryRepositoryTest {
     
-        @Autowired
-        private ProductCategoryRepository repository;
+       @Autowired
+       private ProductCategoryRepository repository;
     
-        @Test
-        public void findOneTest() {
-            // 写个1，就自动出来id:
-            ProductCategory productCategory = repository.findOne(1);
-            System.out.println(productCategory.toString());
-        }
+       @Test
+       public void findOneTest() {
+           // 找出id为1的记录
+           ProductCategory productCategory = repository.findOne(1);
+           System.out.println(productCategory.toString());
+       }
     
-        @Test
-        public void saveTest() { // 新增或修改的话都是用saveTest
-            // 新增得先构造对象
-            ProductCategory productCategory = new ProductCategory();
-            // 修改要加setCategoryId，新增可以不用，因为默认自增id
-            productCategory.setCategoryId(2);
-            productCategory.setCategoryName("精选热菜");
-            productCategory.setCategoryType(3);
-            repository.save(productCategory);
-        }
+       @Test
+       @Transactional /* 测试完数据库不要插入数据 */
+       public void saveTest() { // 新增或修改的话都是用saveTest
+           // 更新往往是先查出来，再判断权限等信息，再可以更改
+           // ProductCategory productCategory = repository.findOne(2);
+           // productCategory.setCategoryType(10);
+           // repository.save(productCategory);
+    
+           // // 新增得先构造对象
+           // ProductCategory productCategory = new ProductCategory();
+           // // 修改要加setCategoryId，新增可以不用，因为默认自增id
+           // productCategory.setCategoryId(2);
+           // productCategory.setCategoryName("精选热菜");
+           // productCategory.setCategoryType(3);
+           // repository.save(productCategory);
+    
+           ProductCategory productCategory = new ProductCategory("女生最爱", 5);
+           ProductCategory result = repository.save(productCategory);
+           Assert.assertNotNull(result);
+           // 等价于Assert.assertNotEquals(null, result);
+       }
+    
+       @Test
+       public void findByCategoryTypeInTest() {
+           List<Integer> list = Arrays.asList(2, 3, 4);
+           List<ProductCategory> result = repository.findByCategoryTypeIn(list);
+           Assert.assertNotEquals(0, result.size());
+       }
     }
