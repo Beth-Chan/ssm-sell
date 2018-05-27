@@ -36,6 +36,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!--此插件支持日志和getter，setter和toString-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
