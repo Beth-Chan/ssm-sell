@@ -27,7 +27,7 @@ public class ProductCategoryRepositoryTest {
     }
 
     @Test
-    @Transactional /* 测试完数据库不要插入数据 */
+    // @Transactional /* 测试完数据库不要插入数据 */
     public void saveTest() { // 新增或修改的话都是用saveTest
         // 更新往往是先查出来，再判断权限等信息，再可以更改
         // ProductCategory productCategory = repository.findOne(2);
