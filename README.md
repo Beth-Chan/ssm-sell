@@ -6,6 +6,7 @@
 > - 日志编写
 > - 买家类目(ProductCategory)DAO层设计与开发
 > - 买家类目Service层设计与开发
+> - 商品信息ProductInfo相关操作(包括DAO、Service和Controller)
 
 #### 数据库设计
 (采用Navicat for MySQL操作，可以新建查询，或者可视化操作）
@@ -409,4 +410,111 @@ public interface ProductService {
     // 减少库存
 }
 ```
+
+第五步：
+```
+@Service
+public class ProductServiceImpl implements ProductService {
+
+    @Autowired
+    private ProductInfoRepository repository;
+
+    @Override
+    public ProductInfo findOne(String productId) {
+        return repository.findOne(productId);
+    }
+
+    @Override
+    public List<ProductInfo> findUpAll() {
+        return repository.findByProductStatus(ProductStatusEnum.UP.getCode());
+    }
+
+    @Override
+    public Page<ProductInfo> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+
+    @Override
+    public ProductInfo save(ProductInfo productInfo) {
+        return repository.save(productInfo);
+    }
+}
+```
+
+第六步：
+
+``` 
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class ProductServiceImplTest {
+
+    @Autowired
+    private ProductServiceImpl productService;
+
+    @Test
+    public void findOne() {
+        ProductInfo productInfo = productService.findOne("1234");
+        Assert.assertEquals("1234", productInfo.getProductId());
+    }
+
+    @Test
+    public void findUpAll() {
+        List<ProductInfo> productInfoList = (List<ProductInfo>) productService.findUpAll();
+        Assert.assertNotEquals(0, productInfoList.size());
+    }
+
+    @Test
+    public void findAll() {
+        // PageRequest继承自AbstractPageRequest，这个类又实现了Pageable接口，Pageable是一个接口，不是具体实现类
+        PageRequest request = new PageRequest(0,2);
+        Page<ProductInfo> productInfoPage = productService.findAll(request);
+        System.out.println(productInfoPage.getTotalElements());
+    }
+
+    @Test
+    public void save() {
+        ProductInfo productInfo = new ProductInfo();
+        productInfo.setProductId("12345678");
+        productInfo.setProductName("皮皮虾");
+        productInfo.setProductPrice(new BigDecimal(68.5));
+        productInfo.setProductStock(120);
+        productInfo.setProductDescription("很好吃的虾");
+        productInfo.setProductIcon("http://xxxxxxxxxxxxxxxxxxxxxxxxxx.jpg");
+        productInfo.setProductStatus(ProductStatusEnum.DOWN.getCode());
+        productInfo.setCategoryType(2);
+
+        ProductInfo result = productService.save(productInfo);
+        Assert.assertNotNull(result);
+    }
+}
+```
+
+
+第七步：
+```
+@Data
+public class ResultVO<T> {
+    // code等于0代表成功
+    private Integer code;
+    private String msg;
+    private T data;
+}
+```
+
+
+第八步：
+```
+@RestController /* 返回json格式 */
+@RequestMapping("/buyer/product")
+public class BuyerProductController {
+    @GetMapping("/list")
+    public ResultVO list() {
+        ResultVO resultVO = new ResultVO();
+        return resultVO;
+    }
+}
+```
+
+至此显示结果是：
+![json](./screenshot/json1.jpg))
 
