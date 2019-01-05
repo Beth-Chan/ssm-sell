@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cxf.sell.repository.OrderDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.cxf.sell.dataobject.OrderDetail" >
+    <id column="detail_id" property="detailId" jdbcType="VARCHAR" />
+    <result column="product_quantity" property="productQuantity" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="product_id" property="productId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    detail_id, product_quantity, create_time, update_time, product_id, order_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from order_detail
+    where detail_id = #{detailId,jdbcType=VARCHAR}
+  </select>
+</mapper>

@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--namespace指定mapper对应的DAO-->
+<mapper namespace="com.cxf.sell.repository.BasicMapper">
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test ="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<sql id="Example_Clause_joint">
+			<foreach collection="example.oredCriteria" item="criteria"
+					 separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+											 open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+	</sql>
+
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Basic_Example_Where_Clause_Trim">
+		<foreach collection="criteria.criteria" item="criterion">
+			<choose>
+				<when test="criterion.noValue">
+					and ${criterion.condition}
+				</when>
+				<when test="criterion.singleValue">
+					and ${criterion.condition} #{criterion.value}
+				</when>
+				<when test="criterion.betweenValue">
+					and ${criterion.condition} #{criterion.value} and
+					#{criterion.secondValue}
+				</when>
+				<when test="criterion.listValue">
+					and ${criterion.condition}
+					<foreach collection="criterion.value" item="listItem" open="("
+						close=")" separator=",">
+						#{listItem}
+					</foreach>
+				</when>
+			</choose>
+		</foreach>
+	</sql>
+
+	<!--parameterType是标明传入的参数类型；属性可以写主键的值-->
+	<insert id="insertBatch" parameterType="java.util.Map">
+		insert into ${dataMap._tableName}
+		<foreach collection="dataMap._tableVar" item="item_varName"
+			index="index" open="(" close=")" separator=",">
+			${item_varName}
+		</foreach>
+		values
+		<foreach collection="dataMap._values" item="value_o" index="index"
+			separator=",">
+			<foreach collection="value_o" item="val" index="index" open="("
+				close=")" separator=",">
+				#{val}
+			</foreach>
+		</foreach>
+	</insert>
+
+	<insert id="insert" parameterType="java.util.Map">
+		insert into ${dataMap._tableName}
+		<foreach collection="dataMap._tableVar" item="item_varName"
+			index="index" open="(" close=")" separator=",">
+			${item_varName}
+		</foreach>
+		values
+		<foreach collection="dataMap._values" item="val" index="index"
+			open="(" close=")" separator=",">
+			#{val}
+		</foreach>
+	</insert>
+
+	<update id="updateBatch" parameterType="java.util.Map">
+		update ${dataMap._tableName} set
+		<foreach collection="dataMap._values" item="id_value_Map"
+			index="key" separator=",">
+			${key}
+			<trim prefix="=case" suffix="end">
+				<foreach collection="id_value_Map" item="_value" index="_id">
+					when
+					${dataMap._tablePKName}=#{_id} then #{_value}
+				</foreach>
+			</trim>
+		</foreach>
+		where ${dataMap._tablePKName} in
+		<foreach collection="dataMap._PKs" item="pk" index="index"
+			open="(" close=")" separator=",">
+			#{pk}
+		</foreach>
+	</update>
+
+	<update id="updateByExample" parameterType="java.util.Map">
+		update ${dataMap._tableName} set
+		<foreach collection="dataMap.fieldData" item="value" index="key"
+			separator=",">
+			${key}=#{value}
+		</foreach>
+		<where>
+			<foreach collection="dataMap.example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<include refid="Basic_Example_Where_Clause_Trim" />
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</update>
+
+	<select id="countByExample" parameterType="com.cxf.sell.dataobject.base.BasicExample"
+		resultType="java.lang.Integer">
+		select count(1) from ${example.tName}
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="map">
+		delete from ${tbName}
+		where ${pkName} in
+		<foreach collection="pks" item="pk" open="(" close=")"
+			separator=",">
+			#{pk}
+		</foreach>
+	</delete>
+	<delete id="deleteByExample" parameterType="com.cxf.sell.dataobject.base.BasicExample" >
+    delete from ${example.tName}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <select id="selectByPrimaryKey" resultType="java.util.Map"  parameterType="java.lang.String" >
+    select *  from ${tbName}
+		where ${pkName} in
+		<foreach collection="pks" item="pk" open="(" close=")"
+			separator=",">
+			#{pk}
+		</foreach>
+  </select>
+
+	<select id="selectByExample" resultType="java.util.Map" parameterType="com.cxf.sell.dataobject.base.BasicExample" >
+    select
+    <if test="example.distinct" >
+      distinct
+    </if>
+       ${example.col} from ${example.tName}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="example.orderByClause != null" >
+      order by ${example.orderByClause}
+    </if>
+  	</select>
+
+	<select id="selectJoint" parameterType="com.cxf.sell.dataobject.base.BasicExample"
+			resultType="java.util.Map">
+		select ${example.col} from ${example.tName}
+		<where>
+			<if test="_parameter != null">
+				<include refid="Example_Clause_joint" />
+			</if>
+		</where>
+	</select>
+</mapper>

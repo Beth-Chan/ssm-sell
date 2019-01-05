@@ -1,35 +1,87 @@
 package com.cxf.sell.dataobject;
 
-import lombok.Data;
-import org.hibernate.annotations.DynamicUpdate;
+import com.cxf.sell.dataobject.base.IBaseDBPO;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import java.util.Date;
 
-/**
- * 表名是product_category
- * @Entity注解 数据库映射为对象
- */
-@Entity
-@DynamicUpdate
-@Data /* lombok getter, setter and toString() */
-public class ProductCategory {
+public class ProductCategory extends IBaseDBPO {
+    private String categoryId;
 
-    /** 类目id. */
-    @Id /* 主键 */
-    @GeneratedValue /* 自增 */
-    private Integer categoryId;
+    private String sellerId;
 
     private String categoryName;
 
     private Integer categoryType;
 
-    public ProductCategory() {
+    private Date createTime;
+
+    private Date updateTime;
+
+    public String getCategoryId() {
+        return categoryId;
     }
 
-    public ProductCategory(String categoryName, Integer categoryType) {
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId == null ? null : categoryId.trim();
+    }
+
+    public String getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(String sellerId) {
+        this.sellerId = sellerId == null ? null : sellerId.trim();
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public Integer getCategoryType() {
+        return categoryType;
+    }
+
+    public void setCategoryType(Integer categoryType) {
         this.categoryType = categoryType;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    @Override
+    public String _getTableName() {
+        return "product_category";
+    }
+
+    @Override
+    public String _getPKColumnName() {
+        return "category_id";
+    }
+
+    @Override
+    public String _getPKValue() {
+        return categoryId;
+    }
+
+    @Override
+    public void _setPKValue(Object var1) {
+        this.categoryId = (String) var1;
     }
 }

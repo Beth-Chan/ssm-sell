@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	<context id="context1" targetRuntime="MyBatis3">
+
+		<!-- 注释 -->
+		<commentGenerator >
+			<property name="suppressAllComments" value="true"/><!-- 是否取消注释 -->
+			<property name="suppressDate" value="true" /> <!-- 是否生成注释代时间戳-->
+		</commentGenerator>
+
+		
+		<jdbcConnection
+			connectionURL="jdbc:mysql://123.207.95.134/yican?serverTimezone=UTC&amp;characterEncoding=utf8&amp;useUnicode=true&amp;useSSL=false"
+			driverClass="com.mysql.jdbc.Driver" password="xfxf" userId="cxf" />
+		
+		
+		<javaModelGenerator targetPackage="com.cxf.sell.dataobject"
+			targetProject=".\src\main\java">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+		
+		<sqlMapGenerator targetPackage="mapper" targetProject=".\src\main\resources" >
+		 <property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		<!--     <collection property="user_id" resultMap="cn.momosv.springboot.dao.TbTestMapper.BaseResultMap"></collection> -->
+		<javaClientGenerator targetPackage="com.cxf.sell.repository"
+			targetProject=".\src\main\java" type="XMLMAPPER" />
+		
+ 		<table  tableName="buyer_Info" domainObjectName="BuyerInfo"
+				enableInsert="false"
+				enableSelectByExample="false"
+				enableUpdateByPrimaryKey="false"
+				enableDeleteByPrimaryKey="false"
+				enableDeleteByExample="false"
+				enableCountByExample="false"
+				enableUpdateByExample="false"></table>
+ 		<table  tableName="order_detail" domainObjectName="OrderDetail"
+				enableInsert="false"
+				enableSelectByExample="false"
+				enableUpdateByPrimaryKey="false"
+				enableDeleteByPrimaryKey="false"
+				enableDeleteByExample="false"
+				enableCountByExample="false"
+				enableUpdateByExample="false"></table>
+
+
+ 		<table  tableName="order_master" domainObjectName="OrderMaster"
+				enableInsert="false"
+				enableSelectByExample="false"
+				enableUpdateByPrimaryKey="false"
+				enableDeleteByPrimaryKey="false"
+				enableDeleteByExample="false"
+				enableCountByExample="false"
+				enableUpdateByExample="false"></table>
+ 		<table  tableName="product_category" domainObjectName="ProductCategory"
+				enableInsert="false"
+				enableSelectByExample="false"
+				enableUpdateByPrimaryKey="false"
+				enableDeleteByPrimaryKey="false"
+				enableDeleteByExample="false"
+				enableCountByExample="false"
+				enableUpdateByExample="false"></table>
+
+
+ 		<table  tableName="product_info" domainObjectName="ProductInfo"
+				enableInsert="false"
+				enableSelectByExample="false"
+				enableUpdateByPrimaryKey="false"
+				enableDeleteByPrimaryKey="false"
+				enableDeleteByExample="false"
+				enableCountByExample="false"
+				enableUpdateByExample="false"></table>
+ 		<table  tableName="product_rating" domainObjectName="ProductRating"
+				enableInsert="false"
+				enableSelectByExample="false"
+				enableUpdateByPrimaryKey="false"
+				enableDeleteByPrimaryKey="false"
+				enableDeleteByExample="false"
+				enableCountByExample="false"
+				enableUpdateByExample="false"></table>
+		<table  tableName="seller_activity" domainObjectName="SellerActivity"
+				enableInsert="false"
+				enableSelectByExample="false"
+				enableUpdateByPrimaryKey="false"
+				enableDeleteByPrimaryKey="false"
+				enableDeleteByExample="false"
+				enableCountByExample="false"
+				enableUpdateByExample="false"></table>
+		<table  tableName="seller_info" domainObjectName="SellerInfo"
+				enableInsert="false"
+				enableSelectByExample="false"
+				enableUpdateByPrimaryKey="false"
+				enableDeleteByPrimaryKey="false"
+				enableDeleteByExample="false"
+				enableCountByExample="false"
+				enableUpdateByExample="false"></table>
+		<table  tableName="seller_rating" domainObjectName="SellerRating"
+				enableInsert="false"
+				enableSelectByExample="false"
+				enableUpdateByPrimaryKey="false"
+				enableDeleteByPrimaryKey="false"
+				enableDeleteByExample="false"
+				enableCountByExample="false"
+				enableUpdateByExample="false"></table>
+
+	</context>
+</generatorConfiguration>

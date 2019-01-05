@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cxf.sell.repository.SellerActivityMapper" >
+  <resultMap id="BaseResultMap" type="com.cxf.sell.dataobject.SellerActivity" >
+    <id column="activity_id" property="activityId" jdbcType="VARCHAR" />
+    <result column="seller_id" property="sellerId" jdbcType="VARCHAR" />
+    <result column="activity_type" property="activityType" jdbcType="TINYINT" />
+    <result column="activity_description" property="activityDescription" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    activity_id, seller_id, activity_type, activity_description
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from seller_activity
+    where activity_id = #{activityId,jdbcType=VARCHAR}
+  </select>
+</mapper>

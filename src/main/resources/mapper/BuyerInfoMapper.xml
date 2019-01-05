@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cxf.sell.repository.BuyerInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.cxf.sell.dataobject.BuyerInfo" >
+    <id column="buyer_id" property="buyerId" jdbcType="VARCHAR" />
+    <result column="buyer_account" property="buyerAccount" jdbcType="VARCHAR" />
+    <result column="buyer_password" property="buyerPassword" jdbcType="VARCHAR" />
+    <result column="buyer_name" property="buyerName" jdbcType="VARCHAR" />
+    <result column="buyer_phone" property="buyerPhone" jdbcType="VARCHAR" />
+    <result column="buyer_address" property="buyerAddress" jdbcType="VARCHAR" />
+    <result column="buyer_avatar" property="buyerAvatar" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    buyer_id, buyer_account, buyer_password, buyer_name, buyer_phone, buyer_address, 
+    buyer_avatar
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from buyer_info
+    where buyer_id = #{buyerId,jdbcType=VARCHAR}
+  </select>
+</mapper>
